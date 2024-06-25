@@ -730,6 +730,50 @@ function Library:new()
 			end)
 		end
 
+        function Module:create_button(button_data)
+			local section = self.section == 'left' and left_section or right_section
+        
+            local button = Instance.new("TextButton")
+            button.Name = "Button"
+            button.Parent = section
+            button.BackgroundColor3 = Color3.fromRGB(27, 28, 33)
+            button.BorderColor3 = Color3.fromRGB(0, 0, 0)
+            button.BorderSizePixel = 0
+            button.Size = UDim2.new(0, 215, 0, 37)
+            button.AutoButtonColor = false
+            button.Font = Enum.Font.SourceSansBold
+            button.Text = button_data.text or ""
+            button.TextColor3 = Color3.fromRGB(255, 255, 255)
+            button.TextSize = 14.000
+            local UICorner = Instance.new("UICorner")
+            UICorner.CornerRadius = UDim.new(0, 10)
+            UICorner.Parent = button
+        
+            local function tweenButtonColor(button, color)
+                local tweenInfo = TweenInfo.new(0.2, Enum.EasingStyle.Linear, Enum.EasingDirection.Out)
+            
+                local tween = TweenService:Create(button, tweenInfo, {
+                    BackgroundColor3 = color
+                })
+            
+                tween:Play()
+            end
+            
+            button.MouseButton1Down:Connect(function()
+                tweenButtonColor(button, Color3.fromRGB(17, 18, 23))
+            end)
+            
+            button.MouseButton1Up:Connect(function()
+                tweenButtonColor(button, Color3.fromRGB(27, 28, 33))
+            end)
+
+            button.MouseButton1Click:Connect(function()
+                button_data.callback()
+            end)
+        
+            return button
+        end               
+
 
         function Module:update_slider()
 			local result = math.clamp((Mouse.X - self.slider.Box.AbsolutePosition.X) / self.slider.Box.AbsoluteSize.X, 0, 1)
@@ -1250,6 +1294,7 @@ function Library:new()
 
             return Textbox;
         end
+
 		function Module:create_keybind()
 			local section = self.section == 'left' and left_section or right_section
 			local keybind = Instance.new("TextButton")
@@ -1348,4 +1393,214 @@ function Library:new()
     end
     return Tab
 end
+
+
+
+
+local main = Library.new()
+local tab = main.create_tab('Main')
+
+tab.create_title({
+	name = 'AutoParry',
+	section = 'left'
+})
+tab.create_toggle({
+	name = 'Enabled',
+	flag = 'autoparry',
+
+	section = 'left',
+	enabled = false,
+
+	callback = function(state: boolean)
+		print(`{state}`)
+	end
+})
+
+local istoggled = false
+
+tab.create_keybind({
+    name = 'Toggle UI',
+    section = 'left',
+    flag = 'toggleKeybind',
+    keycode = Enum.KeyCode.E,  -- Default keybind
+    callback = function(key)
+        if istoggled then
+            print("1")
+            istoggled = false
+        else
+            print("2")
+            istoggled = true
+            end
+        end
+})
+
+
+tab.create_dropdown({
+	name = 'Direction',
+	flag = 'Direction',
+	section = 'left',
+
+	option = 'Custom',
+	options = {'Custom', 'High', 'Random'},
+
+	callback = function(value: string)
+		print(value)
+	end
+})
+tab.create_title({
+	name = 'Visualizer',
+	section = 'right'
+})
+tab.create_toggle({
+	name = 'Enabled',
+	flag = 'visualise',
+
+	section = 'right',
+	enabled = false,
+
+	callback = function(state: boolean)
+	print(`{state}`)
+	end
+})
+tab.create_title({
+	name = 'HitSound',
+	section = 'left'
+})
+
+tab:create_button({
+    text = 'Click Me!',
+    section = 'right',
+    callback = function()
+        print("Button 1 clicked!")
+    end
+})
+
+
+
+tab.create_toggle({
+	name = 'Enabled',
+	flag = 'hitsound',
+
+	section = 'left',
+	enabled = false,
+
+	callback = function(state: boolean)
+		print(`{state}`)
+	end
+})
+tab.create_dropdown({
+	name = 'Sound',
+	flag = 'soundpick',
+	section = 'left',
+
+	option = 'Neverlose',
+	options = {'Click', 'Neverlose', 'Bonk'},
+
+	callback = function(value: string)
+		print(value)
+	end
+})
+tab.create_title({
+	name = 'AI',
+	section = 'right'
+})
+tab.create_toggle({
+	name = 'Enabled',
+	flag = 'AI',
+
+	section = 'right',
+	enabled = false,
+
+	callback = function(state: boolean)
+    print(`{state}`)
+	end
+})
+tab.create_title({
+	name = 'Spin',
+	section = 'right'
+})
+tab.create_toggle({
+	name = 'Enabled',
+	flag = 'spin',
+
+	section = 'right',
+	enabled = false,
+
+	callback = function(state: boolean)
+		print(`{state}`)
+	end
+})
+tab.create_slider({
+	name = 'Speed',
+	flag = 'spinspeed',
+
+	section = 'right',
+
+	value = 25,
+	minimum_value = 0,
+	maximum_value = 100,
+
+	callback = function(value: number)
+		print(value)
+	end
+})
+tab.create_title({
+	name = 'Auto Open Crate',
+	section = 'left'
+})
+tab.create_toggle({
+	name = 'Enabled',
+	flag = 'swordbox',
+
+	section = 'left',
+	enabled = false,
+
+	callback = function(state: boolean)
+		print(`{state}`)
+	end
+})
+tab.create_dropdown({
+	name = 'Crate',
+	flag = 'selectbox',
+	section = 'left',
+
+	option = 'Sword Crate',
+	options = {'Explosion Crate', 'Sword Crate'},
+
+	callback = function(value: string)
+		print(value)
+	end
+})
+
+tab.create_title({
+	name = 'Auto Rewards',
+	section = 'right'
+})
+
+tab.create_toggle({
+	name = 'Enabled',
+	flag = 'rewarde',
+
+	section = 'right',
+	enabled = false,
+
+	callback = function(state: boolean)
+		print(`{state}`)
+	end
+})
+
+tab.create_dropdown({
+	name = 'Rewards',
+	flag = 'selectrewards',
+	section = 'right',
+
+	option = 'Playtime Rewards',
+	options = {'Playtime Rewards', 'Clan Rewards', 'Login Rewards', 'All'},
+
+	callback = function(value: string)
+	    print(value)
+	end
+})
+
+
 return library
