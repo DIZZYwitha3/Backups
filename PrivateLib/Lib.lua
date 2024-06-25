@@ -20,10 +20,9 @@ local Library = {
     dragging = false;
     drag_position = nil;
     start_position = nil;
-    NAME = "Lumin Library";
 }
 
-getgenv().namehub = Library.NAME
+getgenv().namehub = "Lumin Library"
 
 
 if not isfolder("LuminSaves") then
@@ -43,7 +42,7 @@ end
 
 function Library:clear()
 	for _, object in CoreGui:GetChildren() do
-		if object.Name ~= "cac" then
+		if object.Name ~= "Lumin" then
 			continue
 		end
 	
@@ -144,7 +143,7 @@ end
 
 function Library:new()
 	local container = Instance.new("ScreenGui")
-	container.Name = "cac"
+	container.Name = "Lumin"
     container.Parent = CoreGui
 
     Library.core = container
