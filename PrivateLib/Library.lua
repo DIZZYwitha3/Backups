@@ -20,14 +20,14 @@ local Library = {
     dragging = false;
     drag_position = nil;
     start_position = nil;
-    NAME = nil;
+    NAME = "Lumin Library";
 }
 
 getgenv().namehub = Library.NAME
 
 
-if not isfolder("cac hub") then
-    makefolder("cac hub")
+if not isfolder("LuminSaves") then
+    makefolder("LuminSaves")
 end
 
 function Library:disconnect()
@@ -61,13 +61,13 @@ function Library:save_flags()
     if not Library.exist() then return end
 
     local flags = HttpService:JSONEncode(Library.Flags)
-    writefile(`cac hub/{game.GameId}.lua`, flags)
+    writefile(`LuminSaves/{game.GameId}.lua`, flags)
 end
 
 function Library:load_flags()
-    if not isfile(`cac hub/{game.GameId}.lua`) then Library.save_flags() return end
+    if not isfile(`LuminSaves/{game.GameId}.lua`) then Library.save_flags() return end
 
-    local flags = readfile(`cac hub/{game.GameId}.lua`)
+    local flags = readfile(`LuminSaves/{game.GameId}.lua`)
     if not flags then Library.save_flags() return end
 
     Library.Flags = HttpService:JSONDecode(flags)
